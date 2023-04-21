@@ -1,12 +1,13 @@
 use std::net::{TcpStream, SocketAddr, ToSocketAddrs};
 use std::io::{Read, Write};
 
+#[derive(Debug)]
 pub struct ChappClient {
     tcp_stream: TcpStream,
 }
 
 impl ChappClient {
-    fn new(stream: TcpStream) -> Self {
+    pub fn new(stream: TcpStream) -> Self {
         ChappClient {
             tcp_stream: stream,
         }
@@ -34,14 +35,14 @@ impl ChappClient {
         }
     }
 
-    pub fn read(&mut self) -> Result<[u8; 1024], String> {
+    pub fn read(&mut self) -> Result<(usize, [u8; 1024]), String> {
         let mut buf: [u8; 1024] = [0; 1024];
 
         if let Ok(bytes_read) = self.tcp_stream.read(&mut buf) {
-            if bytes_read >= 1024 {
+            if bytes_read > 1024 {
                 Err(format!("Failed to read bytes from {:?}; Error: BufferOverflow", self.addr()))
             } else {
-                Ok(buf)
+                Ok((bytes_read, buf))
             }
         } else {
             Err(format!("Failed to read bytes from {:?}; Error: `stream.read()` failed", self.addr()))
