@@ -1,7 +1,11 @@
 # CHAPP
 
-chat app composed of:
-    - a server to listen incoming messages then broadcast them to readonly clients
-    - a readonly client to show incoming messages (broadcasted from the server)
-    - a writeonly client to send messages to the server (and thus to the readonly clients)
+## Usage
 
+chapp_rs can start a server, that is listening for write and read clients. Write clients can send messages and read clients can read messages sent by writer.
+
+```shell
+$ cargo run -- -l <ip-address>:<port>       # start listening for clients
+$ cargo run -- -w <ip-address>:<port>       # start a write only client
+$ cargo run -- -r <ip-address>:<port>       # start a read only client
+```
